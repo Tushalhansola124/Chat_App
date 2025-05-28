@@ -13,8 +13,8 @@ function App() {
 
   const appID = 730546168;
 
-  const tokenA = '04AAAAAGg36YcADBpfkC4Z6Fvn6qhHNgCv79x/SUvqhnJ1/e/3XM7oBCHfd8HqndjTKx4+iUbK9KYRoCQoVnfP6k2rZY5vR3wXrBzmbLv1J6YINRkC0JBh/w/G+F14uSuw3rDbCkr5+GuQ+/2KXvG6fQWN9T4C+4VVk8RaQjb1Y001wMb6/tW4ZYexG4i9q1EqeGyt378ZpH9TtrIoSrkbcOByTLAQcT9b+Czl97yGz4EM+53MR17btmfyzuwRwkBlv3Uuzg5tEQE='; // Trimmed for brevity
-  const tokenB = '04AAAAAGg36ZoADDJMvV7zGHKdlVDb6QCv+M2/2OlK45wrJDQBUiYDA7Ws0zFZnxzx9F/juOmTdAyQzoiMGGa0aAIgOAVlTaTdI8m/wzjmsDEVT1jjfhpGI8JrwygXUlFVnaMYbWi0obcI6MQ2ZyVc6C8QoQ+cjQv3YYHqKsUMYCiuKv7SJ4aYdB4UMalu/pR4X4ftBgn18y1vzM5N5n5sbWWCp8x7vII/yBpLL9plGYDEaKYXtIiD9UuI6xjWLvoRao6pC3hWZwE='; // Trimmed for brevity
+  const tokenA = '04AAAAAGg36YcADBpfkC4Z6Fvn6qhHNgCv79x/SUvqhnJ1/e/3XM7oBCHfd8HqndjTKx4+iUbK9KYRoCQoVnfP6k2rZY5vR3wXrBzmbLv1J6YINRkC0JBh/w/G+F14uSuw3rDbCkr5+GuQ+/2KXvG6fQWN9T4C+4VVk8RaQjb1Y001wMb6/tW4ZYexG4i9q1EqeGyt378ZpH9TtrIoSrkbcOByTLAQcT9b+Czl97yGz4EM+53MR17btmfyzuwRwkBlv3Uuzg5tEQE='; // Trimmed
+  const tokenB = '04AAAAAGg36ZoADDJMvV7zGHKdlVDb6QCv+M2/2OlK45wrJDQBUiYDA7Ws0zFZnxzx9F/juOmTdAyQzoiMGGa0aAIgOAVlTaTdI8m/wzjmsDEVT1jjfhpGI8JrwygXUlFVnaMYbWi0obcI6MQ2ZyVc6C8QoQ+cjQv3YYHqKsUMYCiuKv7SJ4aYdB4UMalu/pR4X4ftBgn18y1vzM5N5n5sbWWCp8x7vII/yBpLL9plGYDEaKYXtIiD9UuI6xjWLvoRao6pC3hWZwE='; // Trimmed
 
   useEffect(() => {
     const instance = ZIM.create({ appID });
@@ -97,6 +97,11 @@ function App() {
     setMessages([]);
   };
 
+  // Clear all chat messages locally
+  const handleClearChat = () => {
+    setMessages([]);
+  };
+
   const formatTime = (timestamp) => {
     const date = new Date(timestamp || Date.now());
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -109,10 +114,15 @@ function App() {
       <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>💬 TPH CHAT</h1>
 
       {!isLoggedIn ? (
-        <div style={{
-          background: '#f0f0f0', padding: '30px', borderRadius: '12px',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.1)', textAlign: 'center'
-        }}>
+        <div
+          style={{
+            background: '#f0f0f0',
+            padding: '30px',
+            borderRadius: '12px',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+            textAlign: 'center',
+          }}
+        >
           <h2 style={{ marginBottom: '20px' }}>Select User</h2>
           <select
             value={selectedUser}
@@ -132,7 +142,7 @@ function App() {
               color: '#fff',
               border: 'none',
               fontWeight: 'bold',
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
             Login
@@ -141,31 +151,50 @@ function App() {
       ) : (
         <div>
           <div style={{ marginBottom: '10px', textAlign: 'center' }}>
-            <h3>Chatting as <span style={{ color: '#4CAF50' }}>{userInfo.userName}</span> with <span style={{ color: '#2196F3' }}>{recipient}</span></h3>
-            <button
-              onClick={handleLogout}
-              style={{
-                padding: '6px 14px',
-                borderRadius: '6px',
-                background: '#f44336',
-                color: '#fff',
-                border: 'none',
-                cursor: 'pointer',
-                marginTop: '5px'
-              }}
-            >
-              Logout
-            </button>
+            <h3>
+              Chatting as <span style={{ color: '#4CAF50' }}>{userInfo.userName}</span> with{' '}
+              <span style={{ color: '#2196F3' }}>{recipient}</span>
+            </h3>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '5px' }}>
+              <button
+                onClick={handleLogout}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: '6px',
+                  background: '#f44336',
+                  color: '#fff',
+                  border: 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                Logout
+              </button>
+              <button
+                onClick={handleClearChat}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: '6px',
+                  background: '#9E9E9E',
+                  color: '#fff',
+                  border: 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                Clear Chat
+              </button>
+            </div>
           </div>
 
-          <div style={{
-            maxHeight: '400px',
-            overflowY: 'auto',
-            border: '1px solid #ccc',
-            borderRadius: '10px',
-            padding: '15px',
-            backgroundColor: '#e5ddd5'
-          }}>
+          <div
+            style={{
+              maxHeight: '400px',
+              overflowY: 'auto',
+              border: '1px solid #ccc',
+              borderRadius: '10px',
+              padding: '15px',
+              backgroundColor: '#e5ddd5',
+            }}
+          >
             {messages.map((msg, index) => {
               const isOwn = msg.senderUserID === userInfo.userID;
               return (
@@ -174,16 +203,18 @@ function App() {
                   style={{
                     display: 'flex',
                     justifyContent: isOwn ? 'flex-end' : 'flex-start',
-                    marginBottom: '10px'
+                    marginBottom: '10px',
                   }}
                 >
-                  <div style={{
-                    background: isOwn ? '#dcf8c6' : '#fff',
-                    padding: '10px 14px',
-                    borderRadius: '16px',
-                    maxWidth: '70%',
-                    boxShadow: '0 1px 2px rgba(0,0,0,0.2)'
-                  }}>
+                  <div
+                    style={{
+                      background: isOwn ? '#dcf8c6' : '#fff',
+                      padding: '10px 14px',
+                      borderRadius: '16px',
+                      maxWidth: '70%',
+                      boxShadow: '0 1px 2px rgba(0,0,0,0.2)',
+                    }}
+                  >
                     {!isOwn && (
                       <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#555' }}>
                         {msg.senderUserID}
@@ -214,7 +245,7 @@ function App() {
                 fontSize: '16px',
                 borderRadius: '30px',
                 border: '1px solid #ccc',
-                outline: 'none'
+                outline: 'none',
               }}
             />
             <button
@@ -226,7 +257,7 @@ function App() {
                 background: '#4CAF50',
                 color: '#fff',
                 border: 'none',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               Send
